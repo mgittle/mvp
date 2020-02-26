@@ -33,7 +33,9 @@ export default class HomepageOuter extends Component {
   }
 
   handleSubmit() {
-    console.log(this.state.players);
+    this.props.navigation.navigate("Scrabblicious", {
+      players: this.state.players
+    });
   }
 
   render() {
