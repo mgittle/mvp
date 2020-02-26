@@ -1,38 +1,72 @@
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu',
-});
+import React, { Component } from "react";
+import { StyleSheet, View, ImageBackground } from "react-native";
+import Homepage from "./components/Homepage";
+import img from "./images/MediumPile.jpg";
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasError: false,
+      players: 2,
+      imageLoaded: false
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleValueChange = this.handleValueChange.bind(this);
+    this.handleImageLoaded = this.handleImageLoaded.bind(this);
+  }
+
+  static getDerivedStateFromError(error) {
+    this.setState(error => ({ hasError: true }));
+  }
+
+  componentDidCatch(error, errorInfo) {
+    logErrorToMyService(error, errorInfo);
+  }
+
+  handleImageLoaded() {
+    this.setState(() => ({ imageLoaded: true }));
+  }
+
+  handleValueChange(itemValue, itemIndex) {
+    this.setState(() => ({ players: itemValue }));
+  }
+
+  handleSubmit() {
+    console.log(this.state.players);
+  }
+
   render() {
+    if (this.state.hasError) {
+      return <h1>The frost is on the pumpkin.</h1>;
+    }
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+      <View style={styles.flexify}>
+        <ImageBackground
+          source={img}
+          style={styles.backgroundify}
+          imageStyle={{ opacity: 0.3 }}
+          onLoad={this.handleImageLoaded}
+        >
+          <Homepage
+            imageLoaded={this.state.imageLoaded}
+            players={this.state.players}
+            handleValueChange={this.handleValueChange}
+            handleSubmit={this.handleSubmit}
+          />
+        </ImageBackground>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  flexify: {
+    flex: 1
+  },
+  backgroundify: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    width: "100%",
+    height: "100%"
+  }
 });
