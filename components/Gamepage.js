@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
-import { Table, Row, Rows } from "react-native-table-component";
+import {
+  Table,
+  Row,
+  Rows,
+  TableWrapper,
+  Cell
+} from "react-native-table-component";
 
 export default class HomepageOuter extends Component {
   constructor(props) {
@@ -82,13 +88,26 @@ export default class HomepageOuter extends Component {
       >
         <ScrollView bounces={false}>
           <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
-            <Rows
+            {this.state.board.map((rowData, index) => (
+              <TableWrapper key={index} style={styles.row}>
+                {rowData.map((cellData, cellIndex) => (
+                  <Cell
+                    key={cellIndex}
+                    data={cellData}
+                    textStyle={styles.text}
+                    width={100}
+                    height={100}
+                  />
+                ))}
+              </TableWrapper>
+            ))}
+            {/* <Rows
               data={this.state.board}
               Style={styles.row}
               textStyle={styles.text}
               widthArr={widthArr}
               heightArr={widthArr}
-            />
+            /> */}
           </Table>
         </ScrollView>
       </ScrollView>
@@ -130,6 +149,6 @@ const styles = StyleSheet.create({
   },
   text: { fontSize: 50, margin: 5, textAlign: "center" },
   row: {
-    flex: 1
+    flexDirection: "row"
   }
 });
