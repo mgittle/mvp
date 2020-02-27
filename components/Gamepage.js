@@ -21,7 +21,8 @@ export default class HomepageOuter extends Component {
     this.state = {
       hasError: false,
       modalVisible: false,
-      currentCoordinates: [],
+      rowIndex: 0,
+      columnIndex: 0,
       players: props.route.params.players,
       letterBag: {
         Blank: { count: 2, value: 0 },
@@ -93,7 +94,8 @@ export default class HomepageOuter extends Component {
       <TouchableOpacity
         onPress={() => {
           this.setState(() => ({
-            currentCoordinates: [index, cellIndex],
+            rowIndex: index,
+            columnIndex: cellIndex,
             modalVisible: true
           }));
         }}
@@ -119,7 +121,32 @@ export default class HomepageOuter extends Component {
           >
             <View style={styles.modalOuter}>
               <View style={styles.modalInner}>
-                <Text>{this.state.playerHand1}</Text>
+                {this.state.playerHand1.map((letter, letterIndex) => (
+                  <TouchableOpacity
+                    style={styles.modalLetter}
+                    key={letterIndex}
+                    onPress={() => {
+                      if (
+                        !this.state.board[this.state.rowIndex][
+                          this.state.columnIndex
+                        ]
+                      ) {
+                        const board = this.state.board;
+                        const playerHand1 = this.state.playerHand1;
+                        board[this.state.rowIndex][
+                          this.state.columnIndex
+                        ] = letter;
+                        playerHand1[letterIndex] = "";
+                        this.setState(() => ({
+                          playerHand1: playerHand1,
+                          board: board
+                        }));
+                      }
+                    }}
+                  >
+                    <Text>{letter}</Text>
+                  </TouchableOpacity>
+                ))}
               </View>
             </View>
           </Modal>
@@ -195,6 +222,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    flexDirection: "row"
+  },
+  modalLetter: {
+    flex: 1
   }
 });
