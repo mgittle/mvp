@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  Modal
+} from "react-native";
 import {
   Table,
   Row,
@@ -13,6 +20,8 @@ export default class HomepageOuter extends Component {
     super(props);
     this.state = {
       hasError: false,
+      modalVisible: false,
+      currentCoordinates: [],
       players: props.route.params.players,
       letterBag: {
         Blank: { count: 2, value: 0 },
@@ -43,12 +52,12 @@ export default class HomepageOuter extends Component {
         Y: { count: 2, value: 4 },
         Z: { count: 1, value: 10 }
       },
-      playerHand1: [],
+      playerHand1: ["1", "2", "3", "4", "5", "6", "7"],
       playerHand2: [],
       playerHand3: [],
       playerHand4: [],
       board: [
-        ["a", "b", "c", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["a", "b", "c", "d", "", "", "", "", "", "", "", "", "", "", ""],
         ["h", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -79,35 +88,55 @@ export default class HomepageOuter extends Component {
     if (this.state.hasError) {
       return <h1>The frost is on the pumpkin.</h1>;
     }
+
+    const cellElement = (index, cellIndex, cellData) => (
+      <TouchableOpacity
+        onPress={() => {
+          this.setState(() => ({
+            currentCoordinates: [index, cellIndex],
+            modalVisible: true
+          }));
+        }}
+      >
+        <View>
+          <Text style={styles.btnText}>{cellData}</Text>
+        </View>
+      </TouchableOpacity>
+    );
     return (
       <ScrollView
         horizontal={true}
         directionalLockEnabled={true}
         style={styles.container}
-        bounces={false}
       >
         <ScrollView bounces={false}>
+          <Modal
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
+          >
+            <View style={styles.modalOuter}>
+              <View style={styles.modalInner}>
+                <Text>{this.state.playerHand1}</Text>
+              </View>
+            </View>
+          </Modal>
           <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
             {this.state.board.map((rowData, index) => (
               <TableWrapper key={index} style={styles.row}>
                 {rowData.map((cellData, cellIndex) => (
                   <Cell
                     key={cellIndex}
-                    data={cellData}
+                    data={cellElement(index, cellIndex, cellData)}
                     textStyle={styles.text}
-                    width={100}
-                    height={100}
+                    width={50}
+                    height={50}
                   />
                 ))}
               </TableWrapper>
             ))}
-            {/* <Rows
-              data={this.state.board}
-              Style={styles.row}
-              textStyle={styles.text}
-              widthArr={widthArr}
-              heightArr={widthArr}
-            /> */}
           </Table>
         </ScrollView>
       </ScrollView>
@@ -147,8 +176,25 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%"
   },
-  text: { fontSize: 50, margin: 5, textAlign: "center" },
+  text: { fontSize: 40, margin: 5, textAlign: "center" },
   row: {
     flexDirection: "row"
+  },
+  btnText: {
+    textAlign: "center"
+  },
+  modalOuter: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#00000080"
+  },
+  modalInner: {
+    width: 300,
+    height: 300,
+    backgroundColor: "#fff",
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
