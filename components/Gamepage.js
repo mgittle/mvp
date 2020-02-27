@@ -5,15 +5,10 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  Modal
+  Modal,
+  Button
 } from "react-native";
-import {
-  Table,
-  Row,
-  Rows,
-  TableWrapper,
-  Cell
-} from "react-native-table-component";
+import { Table, TableWrapper, Cell } from "react-native-table-component";
 
 export default class HomepageOuter extends Component {
   constructor(props) {
@@ -24,42 +19,18 @@ export default class HomepageOuter extends Component {
       rowIndex: 0,
       columnIndex: 0,
       players: props.route.params.players,
-      letterBag: {
-        Blank: { count: 2, value: 0 },
-        A: { count: 9, value: 1 },
-        B: { count: 2, value: 3 },
-        C: { count: 2, value: 3 },
-        D: { count: 4, value: 2 },
-        E: { count: 12, value: 1 },
-        F: { count: 2, value: 4 },
-        G: { count: 3, value: 2 },
-        H: { count: 2, value: 4 },
-        I: { count: 9, value: 1 },
-        J: { count: 1, value: 8 },
-        K: { count: 1, value: 5 },
-        L: { count: 4, value: 1 },
-        M: { count: 2, value: 3 },
-        N: { count: 6, value: 1 },
-        O: { count: 8, value: 1 },
-        P: { count: 2, value: 3 },
-        Q: { count: 1, value: 10 },
-        R: { count: 6, value: 1 },
-        S: { count: 4, value: 1 },
-        T: { count: 6, value: 1 },
-        U: { count: 4, value: 1 },
-        V: { count: 2, value: 4 },
-        W: { count: 2, value: 4 },
-        X: { count: 1, value: 8 },
-        Y: { count: 2, value: 4 },
-        Z: { count: 1, value: 10 }
-      },
-      playerHand1: ["1", "2", "3", "4", "5", "6", "7"],
-      playerHand2: [],
-      playerHand3: [],
-      playerHand4: [],
+      letterBag: shuffle(letterArray),
+      playerHand1: letterGrabber([]),
+      playerScore1: 0,
+      playerHand2: letterGrabber([]),
+      playerScore2: 0,
+      playerHand3: letterGrabber([]),
+      playerScore3: 0,
+      playerHand4: letterGrabber([]),
+      playerScore4: 0,
       board: [
-        ["a", "b", "c", "d", "", "", "", "", "", "", "", "", "", "", ""],
-        ["h", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -106,87 +77,210 @@ export default class HomepageOuter extends Component {
       </TouchableOpacity>
     );
     return (
-      <ScrollView
-        horizontal={true}
-        directionalLockEnabled={true}
-        style={styles.container}
-      >
-        <ScrollView bounces={false}>
-          <Modal
-            transparent={true}
-            visible={this.state.modalVisible}
-            onRequestClose={() => {
-              console.log("Modal has been closed.");
-            }}
-          >
-            <View style={styles.modalOuter}>
-              <View style={styles.modalInner}>
-                {this.state.playerHand1.map((letter, letterIndex) => (
-                  <TouchableOpacity
-                    style={styles.modalLetter}
-                    key={letterIndex}
-                    onPress={() => {
-                      if (
-                        !this.state.board[this.state.rowIndex][
-                          this.state.columnIndex
-                        ]
-                      ) {
-                        const board = this.state.board;
-                        const playerHand1 = this.state.playerHand1;
+      <View style={styles.flexify}>
+        <ScrollView
+          horizontal={true}
+          directionalLockEnabled={true}
+          style={styles.container}
+        >
+          <ScrollView bounces={false}>
+            <Modal
+              transparent={true}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {
+                this.setState(() => ({
+                  modalVisible: false
+                }));
+              }}
+            >
+              <View style={styles.modalOuter}>
+                <View style={styles.modalInner}>
+                  {this.state.playerHand1.map((letter, letterIndex) => (
+                    <TouchableOpacity
+                      style={styles.modalLetter}
+                      key={letterIndex}
+                      onPress={() => {
+                        const board = this.state.board.slice();
+                        let playerHand1 = this.state.playerHand1.slice();
                         board[this.state.rowIndex][
                           this.state.columnIndex
                         ] = letter;
-                        playerHand1[letterIndex] = "";
+                        playerHand1.splice(letterIndex, 1);
+                        // playerHand1 = letterGrabber(playerHand1);
                         this.setState(() => ({
                           playerHand1: playerHand1,
-                          board: board
+                          board: board,
+                          modalVisible: false
                         }));
-                      }
-                    }}
-                  >
-                    <Text>{letter}</Text>
-                  </TouchableOpacity>
-                ))}
+                      }}
+                    >
+                      <Text>{letter}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
-            </View>
-          </Modal>
-          <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
-            {this.state.board.map((rowData, index) => (
-              <TableWrapper key={index} style={styles.row}>
-                {rowData.map((cellData, cellIndex) => (
-                  <Cell
-                    key={cellIndex}
-                    data={cellElement(index, cellIndex, cellData)}
-                    textStyle={styles.text}
-                    width={50}
-                    height={50}
-                  />
-                ))}
-              </TableWrapper>
-            ))}
-          </Table>
+            </Modal>
+            <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
+              {this.state.board.map((rowData, index) => (
+                <TableWrapper key={index} style={styles.row}>
+                  {rowData.map((cellData, cellIndex) => (
+                    <Cell
+                      key={cellIndex}
+                      data={cellElement(index, cellIndex, cellData)}
+                      textStyle={styles.text}
+                      width={50}
+                      height={50}
+                    />
+                  ))}
+                </TableWrapper>
+              ))}
+            </Table>
+          </ScrollView>
         </ScrollView>
-      </ScrollView>
+        <View style={styles.bottomBar}>
+          <Text>Score: {this.state.playerScore1}</Text>
+          <Text>Hand: {this.state.playerHand1}</Text>
+          <Button
+            title="Submit Word"
+            onPress={() => {
+              let score = this.state.playerScore1;
+              score += 5;
+              this.setState(() => ({
+                playerScore1: score
+              }));
+            }}
+          />
+        </View>
+      </View>
     );
   }
 }
 
-const widthArr = [
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100,
-  100
+const shuffle = function(array) {
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+};
+
+const letterGrabber = function(playerHand) {
+  const handArray = playerHand.slice();
+  while (handArray.length < 7) {
+    handArray.push(letterArray.shift());
+  }
+
+  return handArray;
+};
+
+const letterArray = [
+  ["Blank", 0],
+  ["Blank", 0],
+  ["A", 1],
+  ["A", 1],
+  ["A", 1],
+  ["A", 1],
+  ["A", 1],
+  ["A", 1],
+  ["A", 1],
+  ["A", 1],
+  ["A", 1],
+  ["B", 3],
+  ["B", 3],
+  ["C", 3],
+  ["C", 3],
+  ["D", 2],
+  ["D", 2],
+  ["D", 2],
+  ["D", 2],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["E", 1],
+  ["F", 4],
+  ["F", 4],
+  ["G", 2],
+  ["G", 2],
+  ["G", 2],
+  ["H", 4],
+  ["H", 4],
+  ["I", 1],
+  ["I", 1],
+  ["I", 1],
+  ["I", 1],
+  ["I", 1],
+  ["I", 1],
+  ["I", 1],
+  ["I", 1],
+  ["I", 1],
+  ["J", 8],
+  ["K", 5],
+  ["L", 1],
+  ["L", 1],
+  ["L", 1],
+  ["L", 1],
+  ["M", 3],
+  ["M", 3],
+  ["N", 1],
+  ["N", 1],
+  ["N", 1],
+  ["N", 1],
+  ["N", 1],
+  ["N", 1],
+  ["O", 1],
+  ["O", 1],
+  ["O", 1],
+  ["O", 1],
+  ["O", 1],
+  ["O", 1],
+  ["O", 1],
+  ["O", 1],
+  ["P", 3],
+  ["P", 3],
+  ["Q", 10],
+  ["R", 1],
+  ["R", 1],
+  ["R", 1],
+  ["R", 1],
+  ["R", 1],
+  ["R", 1],
+  ["S", 1],
+  ["S", 1],
+  ["S", 1],
+  ["S", 1],
+  ["T", 1],
+  ["T", 1],
+  ["T", 1],
+  ["T", 1],
+  ["T", 1],
+  ["T", 1],
+  ["U", 1],
+  ["U", 1],
+  ["U", 1],
+  ["U", 1],
+  ["V", 4],
+  ["V", 4],
+  ["W", 4],
+  ["W", 4],
+  ["X", 8],
+  ["Y", 4],
+  ["Y", 4],
+  ["Z", 10]
 ];
 
 const styles = StyleSheet.create({
@@ -195,7 +289,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
     paddingTop: 30
   },
   backgroundify: {
@@ -227,5 +322,14 @@ const styles = StyleSheet.create({
   },
   modalLetter: {
     flex: 1
+  },
+  bottomBar: {
+    backgroundColor: "#00000080",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  bottomText: {
+    textAlign: "center"
   }
 });
