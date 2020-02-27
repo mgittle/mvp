@@ -16,9 +16,11 @@ export default class HomepageOuter extends Component {
     this.state = {
       hasError: false,
       modalVisible: false,
+      passModalVisible: false,
       rowIndex: 0,
       columnIndex: 0,
       players: props.route.params.players,
+      currentPlayer: 1,
       letterBag: shuffle(letterArray),
       playerHand1: letterGrabber([]),
       playerScore1: 0,
@@ -84,42 +86,6 @@ export default class HomepageOuter extends Component {
           style={styles.container}
         >
           <ScrollView bounces={false}>
-            <Modal
-              transparent={true}
-              visible={this.state.modalVisible}
-              onRequestClose={() => {
-                this.setState(() => ({
-                  modalVisible: false
-                }));
-              }}
-            >
-              <View style={styles.modalOuter}>
-                <View style={styles.modalInner}>
-                  {this.state.playerHand1.map((letter, letterIndex) => (
-                    <TouchableOpacity
-                      style={styles.modalLetter}
-                      key={letterIndex}
-                      onPress={() => {
-                        const board = this.state.board.slice();
-                        let playerHand1 = this.state.playerHand1.slice();
-                        board[this.state.rowIndex][
-                          this.state.columnIndex
-                        ] = letter;
-                        playerHand1.splice(letterIndex, 1);
-                        // playerHand1 = letterGrabber(playerHand1);
-                        this.setState(() => ({
-                          playerHand1: playerHand1,
-                          board: board,
-                          modalVisible: false
-                        }));
-                      }}
-                    >
-                      <Text>{letter}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            </Modal>
             <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
               {this.state.board.map((rowData, index) => (
                 <TableWrapper key={index} style={styles.row}>
@@ -146,11 +112,58 @@ export default class HomepageOuter extends Component {
               let score = this.state.playerScore1;
               score += 5;
               this.setState(() => ({
-                playerScore1: score
+                playerScore1: score,
+                passModalVisible: true
               }));
             }}
           />
         </View>
+        <Modal
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            this.setState(() => ({
+              modalVisible: false
+            }));
+          }}
+        >
+          <View style={styles.modalOuter}>
+            <View style={styles.modalInner}>
+              {this.state.playerHand1.map((letter, letterIndex) => (
+                <TouchableOpacity
+                  style={styles.modalLetter}
+                  key={letterIndex}
+                  onPress={() => {
+                    const board = this.state.board.slice();
+                    let playerHand1 = this.state.playerHand1.slice();
+                    board[this.state.rowIndex][this.state.columnIndex] = letter;
+                    playerHand1.splice(letterIndex, 1);
+                    // playerHand1 = letterGrabber(playerHand1);
+                    this.setState(() => ({
+                      playerHand1: playerHand1,
+                      board: board,
+                      modalVisible: false
+                    }));
+                  }}
+                >
+                  <Text>{letter}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </Modal>
+        <Modal visible={this.state.passModalVisible}>
+          <View style={styles.passModal}>
+            <Button
+              title="Take Turn"
+              onPress={() => {
+                this.setState(() => ({
+                  passModalVisible: false
+                }));
+              }}
+            />
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -324,12 +337,18 @@ const styles = StyleSheet.create({
     flex: 1
   },
   bottomBar: {
-    backgroundColor: "#00000080",
-    flex: 1,
+    backgroundColor: "#fff",
+    height: 100,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center"
   },
   bottomText: {
     textAlign: "center"
+  },
+  passModal: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1
   }
 });
