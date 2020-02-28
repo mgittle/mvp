@@ -6,9 +6,11 @@ import {
   Text,
   TouchableOpacity,
   Modal,
-  Button
+  Button,
+  ImageBackground
 } from "react-native";
 import { Table, TableWrapper, Cell } from "react-native-table-component";
+import backImg from "../images/Backboard.jpg";
 
 export default class HomepageOuter extends Component {
   constructor(props) {
@@ -322,124 +324,134 @@ export default class HomepageOuter extends Component {
     );
     return (
       <View style={styles.flexify}>
-        <ScrollView
-          horizontal={true}
-          directionalLockEnabled={true}
-          style={styles.container}
+        <ImageBackground
+          source={backImg}
+          style={styles.backgroundify}
+          imageStyle={{ opacity: 0.3 }}
         >
-          <ScrollView bounces={false}>
-            <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
-              {this.state.board.map((rowData, index) => (
-                <TableWrapper key={index} style={styles.row}>
-                  {rowData.map((cellData, cellIndex) => (
-                    <Cell
-                      key={cellIndex}
-                      data={cellElement(index, cellIndex, cellData)}
-                      textStyle={styles.text}
-                      width={50}
-                      height={50}
-                    />
-                  ))}
-                </TableWrapper>
-              ))}
-            </Table>
+          <ScrollView
+            horizontal={true}
+            directionalLockEnabled={true}
+            style={styles.container}
+          >
+            <ScrollView bounces={false}>
+              <Table borderStyle={{ borderWidth: 2, borderColor: "#000" }}>
+                {this.state.board.map((rowData, index) => (
+                  <TableWrapper key={index} style={styles.row}>
+                    {rowData.map((cellData, cellIndex) => (
+                      <Cell
+                        key={cellIndex}
+                        data={cellElement(index, cellIndex, cellData)}
+                        textStyle={styles.text}
+                        width={50}
+                        height={50}
+                      />
+                    ))}
+                  </TableWrapper>
+                ))}
+              </Table>
+            </ScrollView>
           </ScrollView>
-        </ScrollView>
-        <View style={styles.bottomBar}>
-          <View style={styles.bottomText}>
-            <Text>
-              Score:{" "}
-              {this.state[`playerScore${this.state.currentPlayer}`] + "    "}
-            </Text>
-            <Text>Hand:</Text>
-            <View style={{ flexDirection: "row" }}>
-              {this.state[`playerHand${this.state.currentPlayer}`].map(
-                (tile, tileIndex) => (
-                  <View key={tileIndex} style={{ flexDirection: "row" }}>
-                    <Text style={{ fontWeight: "bold" }}>{" " + tile[0]}</Text>
-                    <Text style={{ fontSize: 10 }}>{tile[1] + "   "}</Text>
-                  </View>
-                )
-              )}
+          <View style={styles.bottomBar}>
+            <View style={styles.bottomText}>
+              <Text>
+                Score:{" "}
+                {this.state[`playerScore${this.state.currentPlayer}`] + "    "}
+              </Text>
+              <Text>Hand:</Text>
+              <View style={{ flexDirection: "row" }}>
+                {this.state[`playerHand${this.state.currentPlayer}`].map(
+                  (tile, tileIndex) => (
+                    <View key={tileIndex} style={{ flexDirection: "row" }}>
+                      <Text style={{ fontWeight: "bold" }}>
+                        {" " + tile[0]}
+                      </Text>
+                      <Text style={{ fontSize: 10 }}>{tile[1] + "   "}</Text>
+                    </View>
+                  )
+                )}
+              </View>
             </View>
-          </View>
-          <Button
-            title="Submit Word"
-            onPress={() => {
-              let score = this.state[`playerScore${this.state.currentPlayer}`];
-              score += 5;
-              this.setState(() => ({
-                [`playerScore${this.state.currentPlayer}`]: score,
-                passModalVisible: true
-              }));
-            }}
-          />
-        </View>
-        <Modal
-          transparent={true}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            this.setState(() => ({
-              modalVisible: false
-            }));
-          }}
-        >
-          <View style={styles.modalOuter}>
-            <View style={styles.modalInner}>
-              {this.state[`playerHand${this.state.currentPlayer}`].map(
-                (letter, letterIndex) => (
-                  <TouchableOpacity
-                    style={styles.modalLetter}
-                    key={letterIndex}
-                    onPress={() => {
-                      const board = this.state.board.slice();
-                      let lastPlaced = [
-                        this.state.rowIndex,
-                        this.state.columnIndex
-                      ];
-                      let playerHand = this.state[
-                        `playerHand${this.state.currentPlayer}`
-                      ].slice();
-                      board[this.state.rowIndex][
-                        this.state.columnIndex
-                      ] = letter;
-                      playerHand.splice(letterIndex, 1);
-                      this.setState(() => ({
-                        [`playerHand${this.state.currentPlayer}`]: playerHand,
-                        board: board,
-                        lastPlaced: lastPlaced,
-                        modalVisible: false
-                      }));
-                    }}
-                  >
-                    <Text style={{ fontWeight: "bold" }}>{letter[0]}</Text>
-                    <Text style={{ fontSize: 10 }}>{letter[1]}</Text>
-                  </TouchableOpacity>
-                )
-              )}
-            </View>
-          </View>
-        </Modal>
-        <Modal visible={this.state.passModalVisible}>
-          <View style={styles.passModal}>
             <Button
-              title="Take Turn"
+              title="Submit Word"
               onPress={() => {
-                let newPlayerHand = letterGrabber(
-                  this.state[`playerHand${this.state.currentPlayer}`]
-                );
+                let score = this.state[
+                  `playerScore${this.state.currentPlayer}`
+                ];
+                score += 5;
                 this.setState(() => ({
-                  [`playerHand${this.state.currentPlayer}`]: newPlayerHand,
-                  passModalVisible: false,
-                  currentPlayer:
-                    this.state.currentPlayer === this.state.players
-                      ? 1
-                      : this.state.currentPlayer + 1
+                  [`playerScore${this.state.currentPlayer}`]: score,
+                  passModalVisible: true
                 }));
               }}
             />
           </View>
-        </Modal>
+          <Modal
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {
+              this.setState(() => ({
+                modalVisible: false
+              }));
+            }}
+          >
+            <View style={styles.modalOuter}>
+              <View style={styles.modalInner}>
+                {this.state[`playerHand${this.state.currentPlayer}`].map(
+                  (letter, letterIndex) => (
+                    <TouchableOpacity
+                      style={styles.modalLetter}
+                      key={letterIndex}
+                      onPress={() => {
+                        const board = this.state.board.slice();
+                        let lastPlaced = [
+                          this.state.rowIndex,
+                          this.state.columnIndex
+                        ];
+                        let playerHand = this.state[
+                          `playerHand${this.state.currentPlayer}`
+                        ].slice();
+                        board[this.state.rowIndex][
+                          this.state.columnIndex
+                        ] = letter;
+                        playerHand.splice(letterIndex, 1);
+                        this.setState(() => ({
+                          [`playerHand${this.state.currentPlayer}`]: playerHand,
+                          board: board,
+                          lastPlaced: lastPlaced,
+                          modalVisible: false
+                        }));
+                      }}
+                    >
+                      <Text style={{ fontWeight: "bold" }}>{letter[0]}</Text>
+                      <Text style={{ fontSize: 10 }}>{letter[1]}</Text>
+                    </TouchableOpacity>
+                  )
+                )}
+              </View>
+            </View>
+          </Modal>
+          <Modal visible={this.state.passModalVisible}>
+            <View style={styles.passModal}>
+              <Button
+                title="Take Turn"
+                onPress={() => {
+                  let newPlayerHand = letterGrabber(
+                    this.state[`playerHand${this.state.currentPlayer}`]
+                  );
+                  this.setState(() => ({
+                    [`playerHand${this.state.currentPlayer}`]: newPlayerHand,
+                    passModalVisible: false,
+                    currentPlayer:
+                      this.state.currentPlayer === this.state.players
+                        ? 1
+                        : this.state.currentPlayer + 1
+                  }));
+                }}
+              />
+            </View>
+          </Modal>
+        </ImageBackground>
       </View>
     );
   }
@@ -628,5 +640,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1
+  },
+  backgroundify: {
+    flex: 1,
+    width: "100%",
+    height: "100%"
   }
 });
