@@ -21,6 +21,7 @@ export default class HomepageOuter extends Component {
       columnIndex: 0,
       players: props.route.params.players,
       currentPlayer: 1,
+      lastPlaced: [],
       letterBag: shuffle(letterArray),
       playerHand1: letterGrabber([]),
       playerScore1: 0,
@@ -31,21 +32,261 @@ export default class HomepageOuter extends Component {
       playerHand4: letterGrabber([]),
       playerScore4: 0,
       board: [
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ],
+        [
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""],
+          ["", ""]
+        ]
       ]
     };
   }
@@ -73,8 +314,9 @@ export default class HomepageOuter extends Component {
           }));
         }}
       >
-        <View>
-          <Text style={styles.btnText}>{cellData}</Text>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <Text style={{ fontWeight: "bold" }}>{"  " + cellData[0]}</Text>
+          <Text style={{ fontSize: 10 }}>{cellData[1] + "   "}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -104,15 +346,30 @@ export default class HomepageOuter extends Component {
           </ScrollView>
         </ScrollView>
         <View style={styles.bottomBar}>
-          <Text>Score: {this.state.playerScore1}</Text>
-          <Text>Hand: {this.state.playerHand1}</Text>
+          <View style={styles.bottomText}>
+            <Text>
+              Score:{" "}
+              {this.state[`playerScore${this.state.currentPlayer}`] + "    "}
+            </Text>
+            <Text>Hand:</Text>
+            <View style={{ flexDirection: "row" }}>
+              {this.state[`playerHand${this.state.currentPlayer}`].map(
+                (tile, tileIndex) => (
+                  <View key={tileIndex} style={{ flexDirection: "row" }}>
+                    <Text style={{ fontWeight: "bold" }}>{" " + tile[0]}</Text>
+                    <Text style={{ fontSize: 10 }}>{tile[1] + "   "}</Text>
+                  </View>
+                )
+              )}
+            </View>
+          </View>
           <Button
             title="Submit Word"
             onPress={() => {
-              let score = this.state.playerScore1;
+              let score = this.state[`playerScore${this.state.currentPlayer}`];
               score += 5;
               this.setState(() => ({
-                playerScore1: score,
+                [`playerScore${this.state.currentPlayer}`]: score,
                 passModalVisible: true
               }));
             }}
@@ -129,26 +386,37 @@ export default class HomepageOuter extends Component {
         >
           <View style={styles.modalOuter}>
             <View style={styles.modalInner}>
-              {this.state.playerHand1.map((letter, letterIndex) => (
-                <TouchableOpacity
-                  style={styles.modalLetter}
-                  key={letterIndex}
-                  onPress={() => {
-                    const board = this.state.board.slice();
-                    let playerHand1 = this.state.playerHand1.slice();
-                    board[this.state.rowIndex][this.state.columnIndex] = letter;
-                    playerHand1.splice(letterIndex, 1);
-                    // playerHand1 = letterGrabber(playerHand1);
-                    this.setState(() => ({
-                      playerHand1: playerHand1,
-                      board: board,
-                      modalVisible: false
-                    }));
-                  }}
-                >
-                  <Text>{letter}</Text>
-                </TouchableOpacity>
-              ))}
+              {this.state[`playerHand${this.state.currentPlayer}`].map(
+                (letter, letterIndex) => (
+                  <TouchableOpacity
+                    style={styles.modalLetter}
+                    key={letterIndex}
+                    onPress={() => {
+                      const board = this.state.board.slice();
+                      let lastPlaced = [
+                        this.state.rowIndex,
+                        this.state.columnIndex
+                      ];
+                      let playerHand = this.state[
+                        `playerHand${this.state.currentPlayer}`
+                      ].slice();
+                      board[this.state.rowIndex][
+                        this.state.columnIndex
+                      ] = letter;
+                      playerHand.splice(letterIndex, 1);
+                      this.setState(() => ({
+                        [`playerHand${this.state.currentPlayer}`]: playerHand,
+                        board: board,
+                        lastPlaced: lastPlaced,
+                        modalVisible: false
+                      }));
+                    }}
+                  >
+                    <Text style={{ fontWeight: "bold" }}>{letter[0]}</Text>
+                    <Text style={{ fontSize: 10 }}>{letter[1]}</Text>
+                  </TouchableOpacity>
+                )
+              )}
             </View>
           </View>
         </Modal>
@@ -157,8 +425,16 @@ export default class HomepageOuter extends Component {
             <Button
               title="Take Turn"
               onPress={() => {
+                let newPlayerHand = letterGrabber(
+                  this.state[`playerHand${this.state.currentPlayer}`]
+                );
                 this.setState(() => ({
-                  passModalVisible: false
+                  [`playerHand${this.state.currentPlayer}`]: newPlayerHand,
+                  passModalVisible: false,
+                  currentPlayer:
+                    this.state.currentPlayer === this.state.players
+                      ? 1
+                      : this.state.currentPlayer + 1
                 }));
               }}
             />
@@ -315,9 +591,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row"
   },
-  btnText: {
-    textAlign: "center"
-  },
   modalOuter: {
     flex: 1,
     justifyContent: "center",
@@ -325,16 +598,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#00000080"
   },
   modalInner: {
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 50,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 10,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row"
   },
   modalLetter: {
-    flex: 1
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginLeft: 10,
+    marginRight: 0
   },
   bottomBar: {
     backgroundColor: "#fff",
@@ -344,7 +621,8 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   bottomText: {
-    textAlign: "center"
+    textAlign: "center",
+    flexDirection: "row"
   },
   passModal: {
     justifyContent: "center",
