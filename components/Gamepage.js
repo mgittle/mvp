@@ -23,7 +23,7 @@ export default class HomepageOuter extends Component {
       columnIndex: 0,
       players: props.route.params.players,
       currentPlayer: 1,
-      lastPlaced: [],
+      lastPlaced: ["", ""],
       letterBag: shuffle(letterArray),
       playerHand1: letterGrabber([]),
       playerScore1: 0,
@@ -387,10 +387,89 @@ export default class HomepageOuter extends Component {
             <Button
               title="Submit Word"
               onPress={() => {
-                let score = this.state[
-                  `playerScore${this.state.currentPlayer}`
-                ];
-                score += 5;
+                var score = 0;
+                score += this.state[`playerScore${this.state.currentPlayer}`];
+                // console.log(this.state.lastPlaced);
+
+                let i = this.state.lastPlaced[0];
+                let j = this.state.lastPlaced[1];
+                let madeWord = "";
+                let madeScore = 0;
+                let modifier = 1;
+                console.log(this.state.board[i + 1][j][0], "board 1");
+                console.log(this.state.board[i - 1][j][0], "board 2");
+                if (
+                  (i + 1 < 15 && this.state.board[i + 1][j][0] !== "") ||
+                  (i - 1 >= 0 && this.state.board[i - 1][j][0] !== "")
+                ) {
+                  // console.log("Got here", this.state.currentPlayer);
+                  while (this.state.board[i - 1][j][0] !== "" && i > 0) {
+                    i--;
+                  }
+                  console.log(i), "starting i";
+                  while (this.state.board[i][j][0] !== "" && i < 15) {
+                    madeWord += this.state.board[i][j][0];
+                    console.log(this.state.board[i][j][2]);
+                    if (this.state.board[i][j][2] === "#9bcadeb0") {
+                      madeScore += this.state.board[i][j][1] * 2;
+                    }
+                    if (this.state.board[i][j][2] === "#f9ada0b0") {
+                      madeScore += this.state.board[i][j][1] * 3;
+                    }
+                    if (this.state.board[i][j][2] === "#ffffff00") {
+                      madeScore += this.state.board[i][j][1];
+                    }
+                    if (this.state.board[i][j][2] === "#f44e0db0") {
+                      modifier *= 3;
+                      madeScore += this.state.board[i][j][1];
+                    }
+                    if (this.state.board[i][j][2] === "#0fa4deb0") {
+                      modifier *= 2;
+                      madeScore += this.state.board[i][j][1];
+                    }
+                    i++;
+                  }
+                }
+                console.log(this.state.board[i][j + 1][0], "board 1");
+                console.log(this.state.board[i][j - 1][0], "board 2");
+                if (
+                  (j + 1 < 15 && this.state.board[i][j + 1][0] !== "") ||
+                  (j - 1 >= 0 && this.state.board[i][j - 1][0] !== "")
+                ) {
+                  // console.log("Got here", this.state.currentPlayer);
+                  while (this.state.board[i][j - 1][0] !== "" && j > 0) {
+                    j--;
+                  }
+                  console.log(this.state.board[i][j][0]);
+                  while (this.state.board[i][j][0] !== "" && j < 15) {
+                    madeWord += this.state.board[i][j][0];
+                    console.log(this.state.board[i][j][2]);
+                    if (this.state.board[i][j][2] === "#9bcadeb0") {
+                      madeScore += this.state.board[i][j][1] * 2;
+                    }
+                    if (this.state.board[i][j][2] === "#f9ada0b0") {
+                      madeScore += this.state.board[i][j][1] * 3;
+                    }
+                    if (this.state.board[i][j][2] === "#ffffff00") {
+                      madeScore += this.state.board[i][j][1];
+                    }
+                    if (this.state.board[i][j][2] === "#f44e0db0") {
+                      modifier *= 3;
+                      madeScore += this.state.board[i][j][1];
+                    }
+                    if (this.state.board[i][j][2] === "#0fa4deb0") {
+                      modifier *= 2;
+                      madeScore += this.state.board[i][j][1];
+                    }
+                    j++;
+                  }
+                }
+                console.log(madeWord, "this is the made word");
+                console.log(modifier, "this is the modifier");
+                console.log(madeScore, "this is the made score");
+                madeScore *= modifier;
+                score += madeScore;
+                console.log(score, "this is the score");
                 this.setState(() => ({
                   [`playerScore${this.state.currentPlayer}`]: score,
                   passModalVisible: true
